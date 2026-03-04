@@ -1,20 +1,555 @@
 <!DOCTYPE html>
-<html lang="en">
-<meta charset="UTF-8">
-<title>Page Title</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="">
-<style>
-</style>
-<script src=""></script>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# a .NET - Kompletní Základy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+/* 1. THE SETUP & PRESENTATION MODE */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0d1117;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden; /* Zabrání jakémukoliv scrollování stránky */
+  font-family: 'Urbanist', sans-serif;
+}
+
+/* 2. SLIDE CONTAINER (Fixed 1280x720) */
+
+.slide-container {
+  display: none; /* Skryto defaultně, ovládáno JS */
+  align-items: center;
+  background-color: #161b22;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  flex-direction: column;
+  height: 720px;
+  justify-content: center;
+  overflow: hidden;
+  padding: 60px;
+  position: relative;
+  width: 1280px;
+  border: 1px solid #30363d;
+}
+
+.slide-container.active {
+  display: flex; /* Zobrazí pouze aktivní slide */
+}
+
+/* Background Design */
+.slide-container::before {
+  content: '';
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+  background-image: radial-gradient(circle at 0% 0%, rgba(66, 185, 131, 0.05) 0%, transparent 40%),
+                    radial-gradient(circle at 100% 100%, rgba(121, 192, 255, 0.05) 0%, transparent 40%);
+}
+
+.slide-container>* {
+  position: relative;
+  z-index: 1;
+}
+
+/* 3. CONSISTENT TYPOGRAPHY */
+
+h1, h2, h3 {
+  color: #ffffff;
+  font-weight: 700;
+  margin: 0;
+}
+
+p, li, th, td {
+  color: #c9d1d9;
+  font-size: 22px;
+  line-height: 1.5;
+  margin: 0 0 15px 0;
+}
+
+h1 { font-size: 70px; text-align: center; }
+h1 span { color: #42b983; }
+
+.slide-title {
+  font-size: 45px;
+  margin-bottom: 40px;
+  text-align: left;
+  width: 100%;
+  color: #42b983;
+}
+
+h3 {
+  font-size: 30px;
+  margin-bottom: 15px;
+  color: #79c0ff;
+}
+
+.subtitle {
+  color: #8b949e;
+  font-size: 26px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.content-area {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  width: 100%;
+}
+
+/* 4. LAYOUT DEFINITIONS */
+
+.title-layout { text-align: center; width: 100%; }
+
+.section-title-layout {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+.section-title-layout h2 { font-size: 65px; color: #42b983; }
+.section-title-layout hr { background-color: #79c0ff; border: none; height: 5px; margin: 30px auto; width: 150px; }
+
+.two-column {
+  align-items: stretch;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  width: 100%;
+}
+
+.two-column.tiled>div {
+  background-color: rgba(13, 17, 23, 0.6);
+  border-radius: 12px;
+  border: 1px solid #30363d;
+  padding: 35px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bullet-list { width: 100%; }
+.bullet-list ul { list-style: none; margin: 0; padding: 0; }
+.bullet-list li { margin-bottom: 25px; padding-left: 50px; position: relative; }
+.bullet-list i { color: #79c0ff; font-size: 28px; left: 0; position: absolute; top: 2px; }
+.bullet-list strong { color: #ffffff; }
+
+/* CODE BLOCKS (Fixed Overflow & Scrollbars) */
+pre {
+  background-color: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 15px 0;
+  width: 100%;
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none; /* VYPNE LIGATURY (zabrání matoucímu spojování znaků >=, == atd.) */
+  font-size: 18px;
+  color: #c9d1d9;
+  white-space: pre-wrap; /* Definitivně zabrání horizontálnímu posuvníku */
+  word-wrap: break-word;
+  overflow-x: hidden; /* Skryje posuvník, pokud by se přece jen nějaký znak nevešel */
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+
+.kw { color: #ff7b72; } /* Keywords (int, string, if) */
+.str { color: #a5d6ff; } /* Strings */
+.com { color: #8b949e; font-style: italic; } /* Comments */
+.cls { color: #d2a8ff; } /* Classes (Console) */
+.fnc { color: #d2a8ff; } /* Functions (WriteLine) */
+
+/* TASK SLIDE (Special Styling) */
+.task-box {
+  background-color: rgba(66, 185, 131, 0.1);
+  border: 2px dashed #42b983;
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+}
+.task-box h3 { color: #42b983; font-size: 35px; margin-bottom: 20px;}
+
+/* Navigation Hint */
+.nav-hint {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: #484f58;
+  font-size: 16px;
+  font-family: 'JetBrains Mono', monospace;
+}
+    </style>
+</head>
 <body>
 
-
-
-<div class="">
- <h1>Hello world!</h1>
-
+<!-- SLIDE 1: Title -->
+<div class="slide-container active" id="slide1">
+    <div class="title-layout">
+        <h1>Vývoj v <span>C#</span> a <span>.NET</span></h1>
+        <p class="subtitle">Proměnné, Vstupy, Podmínky a Cykly</p>
+    </div>
+    <div class="nav-hint">Použij šipky ➔</div>
 </div>
+
+<!-- SLIDE 2: Two Column (Python vs C#) -->
+<div class="slide-container" id="slide2">
+    <h2 class="slide-title">Dynamické vs. Statické typování</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Python a JS (Dynamické)</h3>
+                <p>Nepíšeme datové typy. Program si je odhadne. Bloky děláme odsazením.</p>
+<pre><span class="com"># Nepíšeme datové typy</span>
+jmeno = <span class="str">"David"</span>
+
+<span class="com"># Odsazení dělá blok</span>
+<span class="kw">if</span> jmeno == <span class="str">"David"</span>:
+    print(<span class="str">"Ahoj!"</span>)</pre>
+            </div>
+            <div>
+                <h3>C# (Statický)</h3>
+                <p>Musíme přesně určit datový typ předem, bloky děláme závorkami <code>{}</code>.</p>
+<pre><span class="com">// Typ musíme deklarovat</span>
+<span class="kw">string</span> jmeno = <span class="str">"David"</span>;
+
+<span class="com">// Bloky dělají závorky {}</span>
+<span class="kw">if</span> (jmeno == <span class="str">"David"</span>)
+{
+    <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">"Ahoj!"</span>);
+} <span class="com">// Nezapomenout středník!</span></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3: Code explanation -->
+<div class="slide-container" id="slide3">
+    <h2 class="slide-title">Náš první program</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Jak se kód čte?</h3>
+                <p>Kód se vykonává <strong>odshora dolů</strong>, úplně stejně jako v Pythonu.</p>
+                <p>Každý příkaz (akce), který má program provést, musí být na konci ukončen <strong>středníkem</strong> <code>;</code>.</p>
+            </div>
+            <div>
+                <h3>Ukázka kódu</h3>
+<pre><span class="com">// Vypíše text do konzole a odřádkuje</span>
+<span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">"Hello, World!"</span>);
+
+<span class="com">// Můžeme rovnou psát další logiku</span>
+<span class="kw">int</span> pocet = 10;
+<span class="cls">Console</span>.<span class="fnc">WriteLine</span>(pocet);</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4: Task 1 -->
+<div class="slide-container" id="slide4">
+    <div class="content-area">
+        <div class="task-box">
+            <h3>💻 ÚKOL 1: První spuštění</h3>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-play"></i> Otevřete <strong>Visual Studio</strong>.</li>
+                    <li><i class="fa-solid fa-cube"></i> Vytvořte nový projekt: <strong>Konzolová aplikace (Console App)</strong>.</li>
+                    <li><i class="fa-solid fa-keyboard"></i> Do souboru <code>Program.cs</code> napište kód, který vypíše vaše jméno.</li>
+                    <li><i class="fa-solid fa-rocket"></i> Spusťte program (Zelené tlačítko Play nahoře, nebo klávesa <code>F5</code>).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5: Variables -->
+<div class="slide-container" id="slide5">
+    <h2 class="slide-title">Proměnné a Interpolace</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Základní datové typy</h3>
+                <p>V C# musíme na každý "šuplík" v paměti nalepit štítek s datovým typem:</p>
+                <p style="margin-bottom: 5px;">• <code><span class="kw">int</span></code> pro celá čísla (15, -5)</p>
+                <p style="margin-bottom: 5px;">• <code><span class="kw">string</span></code> pro text (do dvojitých uvozovek: <code>"Ahoj"</code>)</p>
+                <p style="margin-bottom: 5px;">• <code><span class="kw">char</span></code> pro jeden jediný znak (do apostrofů: <code>'A'</code>)</p>
+                <p style="margin-bottom: 5px;">• <code><span class="kw">double</span></code> pro desetinná čísla (výchozí v C#, obrovská přesnost)</p>
+                <p style="margin-bottom: 5px;">• <code><span class="kw">float</span></code> pro desetinná čísla (šetří paměť, nutné 'f': <code>15.5f</code>)</p>
+                <p style="margin-bottom: 5px;">• <code><span class="kw">bool</span></code> pro pravdu/nepravdu (true)</p>
+            </div>
+            <div>
+                <h3>Interpolace (Spojování)</h3>
+                <p>Znak <code>$</code> před uvozovkami nám dovolí vložit proměnnou přímo do textu pomocí <code>{}</code>.</p>
+<pre><span class="kw">int</span> vek = 20;
+<span class="kw">string</span> jmeno = <span class="str">"David"</span>;
+
+<span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">$"Jmenuje se {jmeno} a je mu {vek} let."</span>);</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5.5 (Nový vsuvkový slajd k paměti) -->
+<div class="slide-container" id="slide_pamet">
+    <h2 class="slide-title">Paměť v praxi: Proč máme tolik typů?</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Celá čísla: int vs byte</h3>
+                <p><code><span class="kw">int</span></code> (4 byty) je standard na počítání. Vejde se do něj až 2 miliardy.</p>
+                <p><code><span class="kw">byte</span></code> (1 byte) umí jen čísla od <strong>0 do 255</strong>. Nevyplatí se ho běžně používat k počítání, ale celý svět ho používá na <strong>barvy (RGB)</strong> nebo komunikaci po síti!</p>
+            </div>
+            <div>
+                <h3>Desetinná čísla: double vs float</h3>
+                <p><code><span class="kw">double</span></code> (8 bytů) je ultra-přesný (na 15 míst). Je to výchozí volba v C# pro výpočty.</p>
+                <p><code><span class="kw">float</span></code> (4 byty) je poloviční. Milují ho <strong>3D Hry (Unity)</strong> a grafické karty! Milion pozic objektů v prostoru (X,Y,Z) jako <code>float</code> zabere polovinu paměti oproti <code>double</code> a hra běží rychleji.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6: Inputs -->
+<div class="slide-container" id="slide6">
+    <h2 class="slide-title">Vstup a Parsing (Překlad)</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Čtení textu</h3>
+                <p><code>Console.ReadLine()</code> čeká na uživatele. <strong>Vždy ale vrací text (string).</strong></p>
+<pre><span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">"Jak se jmenuješ?"</span>);
+<span class="kw">string</span> jmeno = <span class="cls">Console</span>.<span class="fnc">ReadLine</span>();</pre>
+            </div>
+            <div>
+                <h3>Překlad na číslo (Parse)</h3>
+                <p>Text "20" se musí přeložit na matematické číslo 20 pomocí <code>int.Parse()</code>.</p>
+<pre><span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">"Zadej věk:"</span>);
+<span class="kw">string</span> textVek = <span class="cls">Console</span>.<span class="fnc">ReadLine</span>();
+
+<span class="com">// Překlad textu na číslo!</span>
+<span class="kw">int</span> cisloVek = <span class="kw">int</span>.<span class="fnc">Parse</span>(textVek);</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7: Task 2 -->
+<div class="slide-container" id="slide7">
+    <div class="content-area">
+        <div class="task-box">
+            <h3>💻 ÚKOL 2: Formulář</h3>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-user"></i> Zeptejte se uživatele na jeho <strong>Jméno</strong> a načtěte ho.</li>
+                    <li><i class="fa-solid fa-calendar"></i> Zeptejte se na jeho <strong>Věk</strong> a text přeložte na číslo (<code>int.Parse</code>).</li>
+                    <li><i class="fa-solid fa-calculator"></i> Vytvořte proměnnou <code>rokNarozeni</code> a spočítejte ji (<code>2024 - vek</code>).</li>
+                    <li><i class="fa-solid fa-print"></i> Vypište do konzole naformátovanou zprávu: <br><em>"Uživatel [Jméno] se narodil přibližně v roce [Rok]."</em></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8: Section Title IF/ELSE -->
+<div class="slide-container" id="slide8">
+    <div class="section-title-layout">
+        <hr>
+        <h2>Podmínky a Logika</h2>
+        <p>Jak naučit program rozhodovat se (If / Else).</p>
+    </div>
+</div>
+
+<!-- SLIDE 9: Logické operátory -->
+<div class="slide-container" id="slide9">
+    <h2 class="slide-title">Porovnávací a Logické operátory</h2>
+    <div class="content-area">
+        <div class="bullet-list">
+            <ul>
+                <li><i class="fa-solid fa-scale-balanced"></i> <strong>Rovnost a Nerovnost:</strong> Zda se dvě věci rovnají zapisujeme dvěma rovnítky <code>==</code>. Zda se nerovnají zapisujeme <code>!=</code>.</li>
+                <li><i class="fa-solid fa-ruler"></i> <strong>Velikost:</strong> Větší <code>></code>, Menší <code><</code>, Větší nebo rovno <code>>=</code>, Menší nebo rovno <code><=</code>.</li>
+                <li><i class="fa-solid fa-link"></i> <strong>A ZÁROVEŇ (AND):</strong> Zapisujeme jako <code>&&</code>. Obě podmínky musí platit.<br><em>Např: (vek >= 18 && penize >= 100)</em></li>
+                <li><i class="fa-solid fa-code-branch"></i> <strong>NEBO (OR):</strong> Zapisujeme jako dvě svislítka <code>||</code>. Stačí, když platí jedna.<br><em>Např: (jmeno == "Admin" || jmeno == "Root")</em></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10: If / Else Syntax -->
+<div class="slide-container" id="slide10">
+    <h2 class="slide-title">Syntaxe If / Else</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Jak to funguje?</h3>
+                <p>Podmínka musí být vždy v kulatých závorkách <code>()</code>. Blok kódu k vykonání je ve složených <code>{}</code>.</p>
+                <p>Na rozdíl od Pythonu (kde je <code>elif</code>), v C# používáme celá slova <code>else if</code>.</p>
+            </div>
+            <div>
+                <h3>Ukázka kódu</h3>
+<pre><span class="kw">int</span> vek = 16;
+
+<span class="kw">if</span> (vek >= 18) 
+{
+    <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">"Vstup povolen."</span>);
+}
+<span class="kw">else if</span> (vek == 17) 
+{
+    <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">"Ještě jeden rok!"</span>);
+}
+<span class="kw">else</span> 
+{
+    <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">"Vstup odepřen."</span>);
+}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11: Task 3 -->
+<div class="slide-container" id="slide11">
+    <div class="content-area">
+        <div class="task-box">
+            <h3>💻 ÚKOL 3: Kontrola plnoletosti</h3>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-code"></i> Rozšiřte svůj předchozí program s formulářem.</li>
+                    <li><i class="fa-solid fa-shield"></i> Pomocí podmínky <code>if / else</code> zkontrolujte věk uživatele.</li>
+                    <li><i class="fa-solid fa-check"></i> Pokud je věk <strong>větší nebo roven 18</strong>, vypište: <em>"Účet byl vytvořen."</em></li>
+                    <li><i class="fa-solid fa-xmark"></i> Jinak (<code>else</code>) vypište: <em>"Omlouváme se, systém je pouze pro dospělé."</em></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12: Section Title Arrays & Loops -->
+<div class="slide-container" id="slide12">
+    <div class="section-title-layout">
+        <hr>
+        <h2>Pole a Cykly</h2>
+        <p>Hromadné ukládání dat a jejich procházení.</p>
+    </div>
+</div>
+
+<!-- SLIDE 13: Arrays -->
+<div class="slide-container" id="slide13">
+    <h2 class="slide-title">Co je to Pole (Array)?</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Seznam hodnot</h3>
+                <p>Když potřebujeme uložit více věcí stejného typu, nepíšeme proměnnou pro každou zvlášť. Vytvoříme pole pomocí <code>[]</code>.</p>
+                <p><strong>Důležité:</strong> Počítáme vždy od nuly! První prvek má index 0.</p>
+            </div>
+            <div>
+                <h3>Práce s polem</h3>
+<pre><span class="com">// Vytvoření pole s konkrétními daty</span>
+<span class="kw">string</span>[] hry = { <span class="str">"Minecraft"</span>, <span class="str">"Fifa"</span>, <span class="str">"Doom"</span> };
+
+<span class="com">// Přečtení prvního prvku</span>
+<span class="cls">Console</span>.<span class="fnc">WriteLine</span>(hry[0]); <span class="com">// Vypíše Minecraft</span>
+
+<span class="com">// Změna druhého prvku</span>
+hry[1] = <span class="str">"NHL 24"</span>;</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14: Loops -->
+<div class="slide-container" id="slide14">
+    <h2 class="slide-title">Cykly (For a Foreach)</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Klasický FOR cyklus</h3>
+                <p>Určujeme začátek (<code>i=0</code>), podmínku dokdy běží a krok (<code>i++</code>).</p>
+<pre><span class="com">// Vypíše čísla od 0 do 4</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i < 5; i++)
+{
+    <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(i);
+}</pre>
+            </div>
+            <div>
+                <h3>Cyklus FOREACH</h3>
+                <p>Ideální pro procházení polí. Odpovídá cyklu <code>for item in list</code> z Pythonu.</p>
+<pre><span class="kw">string</span>[] hry = { <span class="str">"Minecraft"</span>, <span class="str">"Fifa"</span> };
+
+<span class="kw">foreach</span> (<span class="kw">string</span> hra <span class="kw">in</span> hry)
+{
+    <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(hra);
+}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 15: Task 4 -->
+<div class="slide-container" id="slide15">
+    <div class="content-area">
+        <div class="task-box">
+            <h3>💻 ÚKOL 4: Inventář</h3>
+            <div class="bullet-list">
+                <ul>
+                    <li><i class="fa-solid fa-box"></i> Vytvořte pole textů (<code>string[] inventar</code>) a vložte do něj 4 libovolné předměty (např. meč, lektvar, štít...).</li>
+                    <li><i class="fa-solid fa-list"></i> Vypište do konzole nadpis <em>"--- MŮJ INVENTÁŘ ---"</em>.</li>
+                    <li><i class="fa-solid fa-rotate"></i> Použijte cyklus <code>foreach</code> a vypište postupně všechny předměty pod sebe.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16: End -->
+<div class="slide-container" id="slide16">
+    <div class="qa-layout">
+        <h2 style="font-size: 65px; color: #42b983; margin-bottom: 20px;">Skvělá práce!</h2>
+        <p style="text-align: center;">Máte za sebou naprosté základy architektury jazyka C#.</p>
+        <div class="contact-info" style="text-align: center; margin-top: 40px; color: #8b949e;">
+            Založeno, pochopeno, naprogramováno.
+        </div>
+    </div>
+</div>
+
+<script>
+    // JS pro simulaci Prezentace (Přepínání pomocí šipek a mezerníku)
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.slide-container');
+    
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === ' ') {
+            if (currentSlideIndex < slides.length - 1) {
+                slides[currentSlideIndex].classList.remove('active');
+                currentSlideIndex++;
+                slides[currentSlideIndex].classList.add('active');
+                event.preventDefault(); // Zabrání scrollování stránky mezerníkem
+            }
+        } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+            if (currentSlideIndex > 0) {
+                slides[currentSlideIndex].classList.remove('active');
+                currentSlideIndex--;
+                slides[currentSlideIndex].classList.add('active');
+                event.preventDefault();
+            }
+        }
+    });
+</script>
 
 </body>
 </html>
