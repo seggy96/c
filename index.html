@@ -699,17 +699,14 @@ cisla[<span class="num">0</span>] = <span class="num">42</span>;</pre>
             <div>
                 <h3>Jak generovat náhodná čísla?</h3>
                 <p>Ve hrách i aplikacích často potřebujeme náhodu (hod kostkou, poškození nepřítele, loot).</p>
-                <p>V C# si vytvoříme "generátor" pomocí <code>new Random()</code> a pak z něj taháme čísla metodou <code>Next(min, max)</code>.</p>
+                <p>Od .NET 6 už nemusíme složitě vytvářet generátor (pomocí <code>new Random()</code>). Stačí použít moderní jednorádkový příkaz <code>Random.Shared.Next(min, max)</code>.</p>
             </div>
             <div>
                 <h3>Ukázka: Hod kostkou</h3>
-<pre><span class="com">// Vytvoříme si generátor náhody (stačí jednou)</span>
-<span class="cls">Random</span> kostka = <span class="kw">new</span> <span class="cls">Random</span>();
-
-<span class="com">// Chceme číslo od 1 do 6</span>
+<pre><span class="com">// Získáme náhodné číslo od 1 do 6</span>
 <span class="com">// POZOR: Horní hranice tam už NEPATŘÍ! </span>
 <span class="com">// Proto musíme napsat 7.</span>
-<span class="kw">int</span> hod = kostka.<span class="fnc">Next</span>(<span class="num">1</span>, <span class="num">7</span>);
+<span class="kw">int</span> hod = <span class="cls">Random</span>.Shared.<span class="fnc">Next</span>(<span class="num">1</span>, <span class="num">7</span>);
 
 <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">$"Padlo ti: {hod}"</span>);</pre>
             </div>
@@ -725,8 +722,8 @@ cisla[<span class="num">0</span>] = <span class="num">42</span>;</pre>
             <div class="bullet-list">
                 <ul>
                     <li><i class="fa-solid fa-keyboard"></i> Zeptejte se uživatele: <em>"Kolik čísel chceš vygenerovat?"</em> a načtěte délku.</li>
-                    <li><i class="fa-solid fa-box"></i> Vytvořte prázdné pole <code>int[]</code> o této velikosti a připravte si <code>Random</code> generátor.</li>
-                    <li><i class="fa-solid fa-rotate"></i> Pomocí cyklu <code>for</code> (pracovní cyklus) projděte celé pole a do každého "šuplíku" uložte náhodné číslo (např. od 1 do 100).</li>
+                    <li><i class="fa-solid fa-box"></i> Vytvořte prázdné pole <code>int[]</code> o zadané velikosti.</li>
+                    <li><i class="fa-solid fa-rotate"></i> Pomocí cyklu <code>for</code> (pracovní cyklus) projděte celé pole a do každého "šuplíku" uložte náhodné číslo (pomocí <code>Random.Shared.Next</code>, např. od 1 do 100).</li>
                     <li><i class="fa-solid fa-chart-bar"></i> Vytvořte druhý cyklus, tentokrát <code>foreach</code> (čtecí cyklus). V něm pole projděte a spočítejte si: <strong>součet</strong>, počet <strong>sudých</strong> a <strong>lichých</strong> čísel.</li>
                     <li><i class="fa-solid fa-print"></i> Na konci vypište výsledky, včetně <strong>průměru</strong> vygenerovaných čísel.</li>
                 </ul>
@@ -1262,7 +1259,7 @@ pozdrav()</pre>
             <h3 style="color: #3498db;">🎯 ÚKOL 12: Hádej číslo (Logika a Cykly)</h3>
             <div class="bullet-list">
                 <ul>
-                    <li><i class="fa-solid fa-dice" style="color: #3498db;"></i> Pomocí <code>Random</code> vygenerujte jedno tajné číslo od 1 do 100.</li>
+                    <li><i class="fa-solid fa-dice" style="color: #3498db;"></i> Pomocí <code>Random.Shared.Next</code> vygenerujte jedno tajné číslo od 1 do 100.</li>
                     <li><i class="fa-solid fa-rotate" style="color: #3498db;"></i> Vytvořte cyklus <code>while</code>, který se bude opakovat, dokud uživatel tajné číslo neuhodne.</li>
                     <li><i class="fa-solid fa-code-branch" style="color: #3498db;"></i> Pokud uživatel zadá špatné číslo, poraďte mu pomocí <code>if/else</code>: <em>"Hledané číslo je větší!"</em> nebo <em>"Hledané číslo je menší!"</em></li>
                     <li><i class="fa-solid fa-stopwatch" style="color: #3498db;"></i> <strong>Bonus:</strong> Přidejte proměnnou <code>pocetPokusu</code>. Kdykoliv uživatel hádá, zvyšte ji o 1. Na konci vypište: <em>"Uhodl jsi to na 5. pokus!"</em></li>
