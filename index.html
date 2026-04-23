@@ -535,6 +535,32 @@ batoh[<span class="num">1</span>] = <span class="str">"Zlato"</span>;</pre>
     </div>
 </div>
 
+<!-- SLIDE 14b: Index od konce -->
+<div class="slide-container">
+    <h2 class="slide-title">🎩 Machrovinka: Index od konce</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Zdlouhavý starý způsob</h3>
+                <p>Dříve jsme pro získání posledního prvku museli zjistit celkovou délku pole a odečíst jedničku (protože počítáme od nuly).</p>
+<pre><span class="kw">string</span>[] batoh = { <span class="str">"Meč"</span>, <span class="str">"Lektvar"</span>, <span class="str">"Zlato"</span> };
+
+<span class="com">// Zdlouhavé zjišťování konce</span>
+<span class="kw">string</span> posledni = batoh[batoh.Length - <span class="num">1</span>];</pre>
+            </div>
+            <div>
+                <h3>Moderní způsob (Stříška ^)</h3>
+                <p>Od verze C# 8.0 můžeme použít operátor <code>^</code>, který se čte jako <strong>"od konce"</strong>.</p>
+<pre><span class="com">// ^1 znamená první prvek od konce</span>
+<span class="kw">string</span> posledni = batoh[^<span class="num">1</span>]; <span class="com">// Zlato</span>
+
+<span class="com">// ^2 znamená druhý prvek od konce</span>
+<span class="kw">string</span> predposledni = batoh[^<span class="num">2</span>]; <span class="com">// Lektvar</span></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- SLIDE 15: Problém s výpisem celého pole -->
 <div class="slide-container">
     <h2 class="slide-title">⚠️ Zrádný výpis pole</h2>
@@ -1276,9 +1302,13 @@ pozdrav()</pre>
             <h3 style="color: #9b59b6;">🏋️ ÚKOL 13: Metodová rozcvička</h3>
             <div class="bullet-list">
                 <ul>
-                    <li><i class="fa-solid fa-code" style="color: #9b59b6;"></i> Vytvořte metodu <code>int VetsiCislo(int a, int b)</code>. Metoda pomocí podmínky <code>if</code> zjistí, které číslo je větší, a pomocí <code>return</code> ho vrátí.</li>
-                    <li><i class="fa-solid fa-shield" style="color: #9b59b6;"></i> Vytvořte metodu <code>bool JePlnolety(int vek)</code>. Metoda vrátí <code>true</code>, pokud je věk >= 18, jinak vrátí <code>false</code>.</li>
-                    <li><i class="fa-solid fa-play" style="color: #9b59b6;"></i> V hlavním programu si vyžádejte od uživatele čísla/věk, obě metody zavolejte a jejich vrácené výsledky vypište do konzole.</li>
+                    <li><i class="fa-solid fa-code" style="color: #9b59b6;"></i> Vytvořte metodu <code>int VetsiCislo(int a, int b)</code>. Metoda pomocí <code>if</code> zjistí, které číslo je větší, a vrátí ho pomocí <code>return</code>.</li>
+                    <li><i class="fa-solid fa-shield" style="color: #9b59b6;"></i> Vytvořte metodu <code>void ZjistiOpravneni(int vek)</code>. Použijte <code>switch</code> s moderními podmínkami a vypište práva:
+                        <br><span style="font-size: 0.9em;">• <code>case < 15:</code> Nesmí řídit ani pít alkohol.</span>
+                        <br><span style="font-size: 0.9em;">• <code>case <= 17:</code> Smí řídit malou motorku, nesmí pít alkohol.</span>
+                        <br><span style="font-size: 0.9em;">• <code>case >= 18:</code> Smí řídit motorku i pít alkohol.</span>
+                    </li>
+                    <li><i class="fa-solid fa-play" style="color: #9b59b6;"></i> V hlavním programu si vyžádejte od uživatele čísla/věk a obě metody zavolejte.</li>
                 </ul>
             </div>
         </div>
@@ -1302,7 +1332,24 @@ pozdrav()</pre>
     </div>
 </div>
 
-<!-- SLIDE 49: End -->
+<!-- SLIDE 49: Bonus pro experty -->
+<div class="slide-container">
+    <div class="content-area">
+        <div class="task-box" style="border-color: #e74c3c; background-color: rgba(231, 76, 60, 0.05);">
+            <h3 style="color: #e74c3c;">🔥 BONUS: Inženýrské výzvy pro experty</h3>
+            <p style="color: #c9d1d9; margin-bottom: 25px;">Máte vše hotovo? Vyberte si jednu z těchto výzev z praxe a zkuste navrhnout algoritmus.</p>
+            <div class="bullet-list">
+                <ul style="font-size: 0.9em;">
+                    <li style="margin-bottom: 20px;"><i class="fa-solid fa-money-bill-wave" style="color: #e74c3c; top: 0px;"></i> <strong>1. Chytrý bankomat (Greedy algoritmus):</strong> Napište metodu, která dostane částku k vrácení (např. 234) a pomocí cyklu a pole platidel <code>{ 500, 200, 100, 50, 20, 10, 5, 2, 1 }</code> vypíše, co má automat vrátit, aby použil co nejméně mincí (např. 1x 200, 1x 20, 1x 10, 2x 2).</li>
+                    <li style="margin-bottom: 20px;"><i class="fa-solid fa-file-zipper" style="color: #e74c3c; top: 0px;"></i> <strong>2. RLE Komprese textu (Jak funguje ZIP):</strong> Napište metodu, která zkomprimuje text. Pokud do ní pošlete <code>"AAAAABBBCCDAA"</code>, metoda text projde, spočítá stejné znaky za sebou a vrátí zkrácenou verzi <code>"5A3B2C1D2A"</code>.</li>
+                    <li style="margin-bottom: 20px;"><i class="fa-solid fa-shield-halved" style="color: #e74c3c; top: 0px;"></i> <strong>3. Validátor síly hesla:</strong> Napište metodu <code>OhodnotHeslo(string heslo)</code>, která prozkoumá text a vrátí počet bodů (0 až 5). Bod je za: délku > 8, malé písmeno, velké písmeno, číslo a speciální znak. <em>(Tip: prozkoumejte typ <code>char</code>)</em>.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 50: End -->
 <div class="slide-container">
     <div class="qa-layout">
         <h2 style="font-size: 65px; color: #42b983; margin-bottom: 20px;">Jste připraveni!</h2>
