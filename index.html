@@ -881,7 +881,7 @@ pozdrav()</pre>
 
 <!-- SLIDE 35: Problém - hloupý program -->
 <div class="slide-container" id="slide35">
-    <h2 class="slide-title">Problém s jednorázovým během</h2>
+    <h2 class="slide-title">Problém s jednorázovým běhěm</h2>
     <div class="content-area">
         <div class="two-column tiled">
             <div>
@@ -1031,7 +1031,7 @@ pozdrav()</pre>
 
 <!-- SLIDE 42: Pojmenované Tuples -->
 <div class="slide-container" id="slide42">
-    <h2 class="slide-title">Pojmenování položek</h2>
+    <h2 class="slide-title">Pojmenování položek (Pohodlí)</h2>
     <div class="content-area">
         <div class="two-column tiled">
             <div>
@@ -1067,14 +1067,14 @@ pozdrav()</pre>
             <div>
                 <h3>Metoda vracející Tuple</h3>
 <pre><span class="com">// Metoda vrací 2 hodnoty najednou!</span>
-(<span class="kw">string</span> Jmeno, <span class="kw">int</span> Zivoty) <span class="fnc">GetInfo</span>()
+(<span class="kw">string</span> Jmeno, <span class="kw">int</span> Zivoty) <span class="fnc">ZiskejPostavu</span>()
 {
     <span class="com">// Jakoby vracíme "batůžek"</span>
     <span class="kw">return</span> (<span class="str">"Hrdina"</span>, 100); 
 }
 
 <span class="com">// Zavolání metody</span>
-<span class="kw">var</span> postava = <span class="fnc">GetInfo</span>();
+<span class="kw">var</span> postava = <span class="fnc">ZiskejPostavu</span>();
 <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(postava.Jmeno);</pre>
             </div>
         </div>
@@ -1095,11 +1095,11 @@ pozdrav()</pre>
                 <h3>Rozbalení do proměnných</h3>
 <pre><span class="com">// Z metody dostaneme jméno a životy</span>
 <span class="com">// Rovnou je "rozbalíme" do 2 proměnných</span>
-<span class="kw">var</span> (jmenoHrdiny, hp) = <span class="fnc">GetInfo</span>();
+<span class="kw">var</span> (jmenoHrdiny, hp) = <span class="fnc">ZiskejPostavu</span>();
 <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(hp); 
 
 <span class="com">// Chci jen jméno, životy mě nezajímají (zahodím je)</span>
-<span class="kw">var</span> (jenJmeno, _) = <span class="fnc">GetInfo</span>();
+<span class="kw">var</span> (jenJmeno, _) = <span class="fnc">ZiskejPostavu</span>();
 <span class="cls">Console</span>.<span class="fnc">WriteLine</span>(jenJmeno);</pre>
             </div>
         </div>
@@ -1129,8 +1129,44 @@ pozdrav()</pre>
     </div>
 </div>
 
-<!-- SLIDE 46: Úkoly 3 a 4 -->
+<!-- SLIDE 46: Řešení Úkolu 2 -->
 <div class="slide-container" id="slide46">
+    <h2 class="slide-title">Řešení: Min a Max</h2>
+    <div class="content-area">
+        <div class="two-column tiled">
+            <div>
+                <h3>Jak na to?</h3>
+                <p>Nejprve si do <code>min</code> i <code>max</code> uložíme první číslo (a).</p>
+                <p>Pak ho pomocí jednoduchých <code>if</code> podmínek porovnáme se zbytkem. Pokud najdeme menší číslo, přepíšeme <code>min</code>. Pokud najdeme větší, přepíšeme <code>max</code>.</p>
+                <p>Na konci metodu obalíme do kulatých závorek <code>return (min, max);</code> a máme hotovo!</p>
+            </div>
+            <div>
+                <h3>Kód řešení</h3>
+<pre><span class="com">// 1. HLAVNÍ PROGRAM</span>
+<span class="kw">var</span> vysledek = <span class="fnc">NajdiMinMax</span>(2, 4, 1);
+<span class="cls">Console</span>.<span class="fnc">WriteLine</span>(<span class="str">$"Nejmenší: {vysledek.nejmensi}, Největší: {vysledek.nejvetsi}"</span>);
+
+<span class="com">// 2. DEFINICE METODY</span>
+(<span class="kw">int</span> nejmensi, <span class="kw">int</span> nejvetsi) <span class="fnc">NajdiMinMax</span>(<span class="kw">int</span> a, <span class="kw">int</span> b, <span class="kw">int</span> c) 
+{
+    <span class="kw">int</span> min = a;
+    <span class="kw">int</span> max = a;
+    
+    <span class="kw">if</span> (b < min) min = b;
+    <span class="kw">if</span> (c < min) min = c;
+    
+    <span class="kw">if</span> (b > max) max = b;
+    <span class="kw">if</span> (c > max) max = c;
+    
+    <span class="kw">return</span> (min, max);
+}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 47: Úkoly 3 a 4 -->
+<div class="slide-container" id="slide47">
     <div class="content-area">
         <div class="task-box" style="border-color: #9b59b6; background-color: rgba(155, 89, 182, 0.05);">
             <h3 style="color: #9b59b6;">🚀 PRAXE Z REÁLNÉHO SVĚTA</h3>
@@ -1150,8 +1186,8 @@ pozdrav()</pre>
     </div>
 </div>
 
-<!-- SLIDE 47: Úkol 5 (Boss Fight) -->
-<div class="slide-container" id="slide47">
+<!-- SLIDE 48: Úkol 5 (Boss Fight) -->
+<div class="slide-container" id="slide48">
     <div class="content-area">
         <div class="task-box" style="border-color: #e74c3c; background-color: rgba(231, 76, 60, 0.05);">
             <h3 style="color: #e74c3c;">⚔️ ÚKOL 5 (VÝZVA): Herní útok</h3>
@@ -1166,8 +1202,8 @@ pozdrav()</pre>
     </div>
 </div>
 
-<!-- SLIDE 48: End -->
-<div class="slide-container" id="slide48">
+<!-- SLIDE 49: End -->
+<div class="slide-container" id="slide49">
     <div class="qa-layout">
         <h2 style="font-size: 65px; color: #42b983; margin-bottom: 20px;">Jste mistři řízení toku a dat!</h2>
         <p style="text-align: center;">Víte, jak program zacyklit, jak ho elegantně řídit switchem a jak předávat hromady dat pomocí moderních N-tic.</p>
